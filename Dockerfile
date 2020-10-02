@@ -4,6 +4,7 @@ RUN apk add --no-cache --virtual scummvm-build-dependencies \
     git \
     build-base \
     clang-dev \
+    ccache \
     gtk+3.0-dev \
     libx11-dev
 
