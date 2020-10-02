@@ -3,7 +3,16 @@ FROM alpine
 RUN apk add --no-cache --virtual scummvm-build-dependencies \
     git \
     build-base \
+    clang-dev \
+    gtk+3.0-dev \
+    libx11-dev
+
+RUN apk add --no-cache --virtual scummvm-edge-build-dependencies \
+    --repository http://dl-cdn.alpinelinux.org/alpine/edge/testing \
+    --repository http://dl-cdn.alpinelinux.org/alpine/edge/community \
+    --repository http://dl-cdn.alpinelinux.org/alpine/edge/main \
     sdl2-dev \
+    sdl2_net-dev \
     a52dec-dev \
     libjpeg-turbo-dev \
     libmpeg2-dev \
@@ -17,6 +26,10 @@ RUN apk add --no-cache --virtual scummvm-build-dependencies \
     fluidsynth-dev \
     freetype-dev \
     zlib-dev \
+    curl-dev \
+    libieee1284-dev \
+    sndio-dev \
+    readline-dev \
     fribidi-dev
 
 ENV SCUMMVM_REVISION v2.2.0
@@ -24,7 +37,13 @@ RUN git clone --recursive --branch ${SCUMMVM_REVISION} https://github.com/scummv
 
 WORKDIR /scummvm
 
-RUN ./configure -prefix=/opt/scummvm
-RUN make
-RUN make install
+#ENV CXX clang++
+#ENV CFLAGGS "$CFLAGS -U_FORTIFY_SOURCE"
+#ENV CXXFLAGS "$CXXFLAGS -U_FORTIFY_SOURCE"
+
+RUN ./configure \
+    --prefix=/opt/scummvm \
+    --enable-all-engines
+#RUN make
+#RUN make install
 
